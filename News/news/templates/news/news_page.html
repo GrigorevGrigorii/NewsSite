@@ -13,24 +13,28 @@
             <button type="submit">Search</button>
         </form>
         
-        <h4 class="weather">Weather in {{ weather.name }}:</h4>
-        <p class="weather">Now {{ weather.description }}</p>
-        <p class="weather">Current temperature: {{ weather.temp }} °C</p>
-        <p class="weather">Feels like: {{ weather.feels_like }} °C</p>
-        <p class="weather">Pressure: {{ weather.pressure }} mmhg</p>
-        <p class="weather">Humidity: {{ weather.humidity }}%</p>
-        <p class="weather">Wind: {{ weather.wind_speed }} kmph</p>
-
-        {% regroup data by created|date:"Y-m-d" as grouped_data %}
-        {% for group in grouped_data %}
-            <h4>{{ group.grouper }}</h4>
-            <ul>
-                {% for item in group.list %}
-                    <li><a href="/news/{{ item.link }}/">{{ item.title }}</a></li>
+        <main>
+            <div id="left">
+                {% regroup data by created|date:"Y-m-d" as grouped_data %}
+                {% for group in grouped_data %}
+                    <h4>{{ group.grouper }}</h4>
+                    <ul>
+                        {% for item in group.list %}
+                            <li><a href="/news/{{ item.link }}/">{{ item.title }}</a></li>
+                        {% endfor %}
+                    </ul>
                 {% endfor %}
-            </ul>
-        {% endfor %}
-        
-        <p><a href="/news/create/">Create news</a></p>
+                <p><a href="/news/create/">Create news</a></p>
+            </div>
+            <div id="right">
+                <h4 class="weather">Weather in {{ weather.name }}:</h4>
+                <p class="weather">Now {{ weather.description }}</p>
+                <p class="weather">Current temperature: {{ weather.temp }} °C</p>
+                <p class="weather">Feels like: {{ weather.feels_like }} °C</p>
+                <p class="weather">Pressure: {{ weather.pressure }} mmhg</p>
+                <p class="weather">Humidity: {{ weather.humidity }}%</p>
+                <p class="weather">Wind: {{ weather.wind_speed }} kmph</p>
+            </div>
+        </main>
     </body>
 </html>
