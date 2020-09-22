@@ -5,12 +5,6 @@
         <title>News</title>
         {% load static %}
         <link rel="stylesheet" href="{% static 'css/base.css' %}">
-        <!--<style>
-            .weather {
-                text-align: right;
-                line-height: 0.5;
-            }
-        </style>-->
     </head>
     <body>
         <h2>News</h2>
@@ -20,14 +14,14 @@
         </form>
         
         <h4 class="weather">Weather in {{ weather.name }}:</h4>
-        <p class="weather">{{ weather.description }} currently</p>
+        <p class="weather">Now {{ weather.description }}</p>
         <p class="weather">Current temperature: {{ weather.temp }} °C</p>
         <p class="weather">Feels like: {{ weather.feels_like }} °C</p>
         <p class="weather">Pressure: {{ weather.pressure }} mmhg</p>
         <p class="weather">Humidity: {{ weather.humidity }}%</p>
         <p class="weather">Wind: {{ weather.wind_speed }} kmph</p>
 
-        {% regroup data|dictsortreversed:"created" by created|slice:":10" as grouped_data %}
+        {% regroup data by created|date:"Y-m-d" as grouped_data %}
         {% for group in grouped_data %}
             <h4>{{ group.grouper }}</h4>
             <ul>
