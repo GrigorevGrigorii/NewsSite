@@ -120,6 +120,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-NEWS_JSON_PATH = './data.json'
-
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]

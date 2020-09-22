@@ -2,14 +2,14 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>{{ title }}</title>
+        <title>{{ specific_news.title }}</title>
         {% load static %}
         <link rel="stylesheet" href="{% static 'css/base.css' %}">
     </head>
     <body>
-        <h2>{{ title }}</h2>
-        <p>{{ created }}</p>
-        <p>{{ text }}</p>
+        <h2>{{ specific_news.title }}</h2>
+        <h4>{{ specific_news.created|date:"Y-m-d H:i:s" }}</h4>
+        <p>{{ specific_news.text }}</p>
         <p><a href="/news/">All news</a></p>
     </body>
 </html>
