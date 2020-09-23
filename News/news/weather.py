@@ -10,9 +10,9 @@ class Weather:
         self.number_of_minutes_for_update = number_of_minutes_for_update
 
     @staticmethod
-    def get_weather():
+    def get_weather(city='Saint Petersburg'):
         if datetime.datetime.now() - Weather.start_time > datetime.timedelta(minutes=3) or Weather.current_weather is None:
-            r = requests.get('https://api.openweathermap.org/data/2.5/weather', {'q': 'Saint Petersburg', 'appid': '9f7ad1eebe97cba2c8ebb5dd08ab3a52'})
+            r = requests.get('https://api.openweathermap.org/data/2.5/weather', {'q': city, 'appid': '9f7ad1eebe97cba2c8ebb5dd08ab3a52'})
             data = r.json()
             weather = dict()
             weather['name'] = data['name']
