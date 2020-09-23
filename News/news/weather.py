@@ -1,18 +1,19 @@
 import requests
-import datetime
+from datetime import datetime, timedelta
 
 
 class Weather:
     current_weather = None
-    start_time = datetime.datetime.now()
+    start_time = None
 
-    def __init__(self, number_of_minutes_for_update=1):
+    def __init__(self, number_of_minutes_for_update=2):
         self.number_of_minutes_for_update = number_of_minutes_for_update
 
-    @staticmethod
-    def get_weather(city='Saint Petersburg'):
-        if datetime.datetime.now() - Weather.start_time > datetime.timedelta(minutes=3) or Weather.current_weather is None:
-            r = requests.get('https://api.openweathermap.org/data/2.5/weather', {'q': city, 'appid': '9f7ad1eebe97cba2c8ebb5dd08ab3a52'})
+    def get_weather(self, city='Saint Petersburg'):
+        if Weather.current_weather is None or datetime.now() - Weather.start_time > timedelta(
+                minutes=self.number_of_minutes_for_update):
+            r = requests.get('https://api.openweathermap.org/data/2.5/weather',
+                             {'q': city, 'appid': '9f7ad1eebe97cba2c8ebb5dd08ab3a52'})
             data = r.json()
             weather = dict()
             weather['name'] = data['name']
@@ -23,6 +24,7 @@ class Weather:
             weather['humidity'] = data['main']['humidity']
             weather['wind_speed'] = round(data['wind']['speed'] * 3.6, 2)
 
+            Weather.start_time = datetime.now()
             Weather.current_weather = weather
 
             return weather
@@ -33,4 +35,3 @@ class Weather:
 if __name__ == "__main__":
     weather = Weather()
     print(weather.get_weather())
-
