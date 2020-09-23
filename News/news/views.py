@@ -3,24 +3,11 @@ from django.shortcuts import render, redirect
 from django.http import Http404
 from django.views import View
 
-from news.models import News
+from .models import News
 
 import requests
-
-
-def get_weather():
-    r = requests.get('https://api.openweathermap.org/data/2.5/weather', {'q': 'Saint Petersburg', 'appid': '9f7ad1eebe97cba2c8ebb5dd08ab3a52'})
-    data = r.json()
-    weather = {}
-    weather['name'] = data['name']
-    weather['description'] = data['weather'][0]['description']
-    weather['temp'] = round(data['main']['temp'] - 273.15, 2)
-    weather['feels_like'] = round(data['main']['feels_like'] - 273.15, 2)
-    weather['pressure'] = round(data['main']['pressure'] * 0.750062, 2)
-    weather['humidity'] = data['main']['humidity']
-    weather['wind_speed'] = round(data['wind']['speed'] * 3.6, 2)
-    
-    return weather
+from .weather import Weather
+weather_class = Weather()
 
 
 class StartPage(View):
@@ -31,7 +18,7 @@ class StartPage(View):
 class NewsPage(View):
     def get(self, request, *args, **kwargs):
         ordered_data = News.objects.order_by('-created')
-        return render(request, "news/news_page.html", context={'data': ordered_data, 'weather': get_weather()})
+        return render(request, "news/news_page.html", context={'data': ordered_data, 'weather': weather_class.get_weather()})
 
 
 class SpecificNewsPage(View):
@@ -46,7 +33,7 @@ class SearchPage(View):
     def get(self, request, *args, **kwargs):
         q = request.GET.get('q').rstrip('/')
         ordered_data_with_q = News.objects.filter(title__contains=q).order_by('-created')
-        return render(request, "news/news_page.html", context={'data': ordered_data_with_q, 'weather': get_weather()})
+        return render(request, "news/news_page.html", context={'data': ordered_data_with_q, 'weather': weather_class.get_weather()})
     
     def post(self, request, *args, **kwargs):
         q = request.POST.get('q')
