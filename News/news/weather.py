@@ -3,17 +3,17 @@ from datetime import datetime, timedelta
 
 
 class Weather:
-    current_weather = None
-    start_time = None
+    city_and_weather = dict()
 
-    def __init__(self, number_of_minutes_for_update=2):
+    def __init__(self, number_of_minutes_for_update=1):
         self.number_of_minutes_for_update = number_of_minutes_for_update
 
-    def get_weather(self, city='Saint Petersburg'):
-        if Weather.current_weather is None or datetime.now() - Weather.start_time > timedelta(
-                minutes=self.number_of_minutes_for_update):
-            r = requests.get('https://api.openweathermap.org/data/2.5/weather',
-                             {'q': city, 'appid': '9f7ad1eebe97cba2c8ebb5dd08ab3a52'})
+    def get_weather(self, city="Saint Petersburg"):
+        if city not in Weather.city_and_weather.keys() or datetime.now() - Weather.city_and_weather[city]['start_time'] > timedelta(minutes=self.number_of_minutes_for_update):
+            r = requests.get('https://api.openweathermap.org/data/2.5/weather', {'q': city, 'appid': '9f7ad1eebe97cba2c8ebb5dd08ab3a52'})
+            if r.status_code != 200:
+                return None
+
             data = r.json()
             weather = dict()
             weather['name'] = data['name']
@@ -23,13 +23,15 @@ class Weather:
             weather['pressure'] = round(data['main']['pressure'] * 0.750062, 2)
             weather['humidity'] = data['main']['humidity']
             weather['wind_speed'] = round(data['wind']['speed'] * 3.6, 2)
+            weather['timezone'] = data['timezone'] // 3600
 
-            Weather.start_time = datetime.now()
-            Weather.current_weather = weather
+            Weather.city_and_weather[city] = dict()
+            Weather.city_and_weather[city]['weather'] = weather
+            Weather.city_and_weather[city]['start_time'] = datetime.now()
 
             return weather
         else:
-            return Weather.current_weather
+            return Weather.city_and_weather[city]['weather']
 
 
 if __name__ == "__main__":
