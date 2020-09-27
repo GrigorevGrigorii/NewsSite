@@ -36,7 +36,7 @@ class SearchPage(View):
     def get(self, request, *args, **kwargs):
         q = request.GET.get('q').rstrip('/')
         ordered_data_with_q = News.objects.filter(title__contains=q).order_by('-created')
-        return render(request, "news/news_page.html", context={'data': ordered_data_with_q, 'weather': weather_class.get_weather(current_city), 'city_form': city_form})
+        return render(request, "news/news_page.html", context={'data': ordered_data_with_q, 'weather': weather_class.get_weather(current_city)})
     
     def post(self, request, *args, **kwargs):
         q = request.POST.get('q')
