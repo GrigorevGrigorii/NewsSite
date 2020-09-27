@@ -5,9 +5,11 @@ from django.views import View
 
 from .models import News
 
-import requests
 from .weather import Weather
+
+
 weather_class = Weather()
+current_city = "Saint Petersburg"
 
 
 class StartPage(View):
@@ -18,7 +20,7 @@ class StartPage(View):
 class NewsPage(View):
     def get(self, request, *args, **kwargs):
         ordered_data = News.objects.order_by('-created')
-        return render(request, "news/news_page.html", context={'data': ordered_data, 'weather': weather_class.get_weather()})
+        return render(request, "news/news_page.html", context={'data': ordered_data, 'weather': weather_class.get_weather(city=current_city), 'city_form': city_form})
 
 
 class SpecificNewsPage(View):
@@ -26,6 +28,7 @@ class SpecificNewsPage(View):
         specific_news = News.objects.filter(link=link).first()
         if not specific_news:
             raise Http404
+        specific_news.created += weather_class.get_weather(city=current_city)['timezone']
         return render(request, "news/specific_news_page.html", context={'specific_news': specific_news})
 
 
@@ -33,7 +36,7 @@ class SearchPage(View):
     def get(self, request, *args, **kwargs):
         q = request.GET.get('q').rstrip('/')
         ordered_data_with_q = News.objects.filter(title__contains=q).order_by('-created')
-        return render(request, "news/news_page.html", context={'data': ordered_data_with_q, 'weather': weather_class.get_weather()})
+        return render(request, "news/news_page.html", context={'data': ordered_data_with_q, 'weather': weather_class.get_weather(current_city), 'city_form': city_form})
     
     def post(self, request, *args, **kwargs):
         q = request.POST.get('q')
