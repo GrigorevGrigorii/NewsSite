@@ -23,7 +23,7 @@ class Weather:
             weather['pressure'] = round(data['main']['pressure'] * 0.750062, 2)
             weather['humidity'] = data['main']['humidity']
             weather['wind_speed'] = round(data['wind']['speed'] * 3.6, 2)
-            weather['timezone'] = data['timezone'] // 3600
+            weather['timezone'] = timedelta(seconds=data['timezone'])
 
             Weather.city_and_weather[city] = dict()
             Weather.city_and_weather[city]['weather'] = weather
