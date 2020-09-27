@@ -20,7 +20,7 @@ class StartPage(View):
 class NewsPage(View):
     def get(self, request, *args, **kwargs):
         ordered_data = News.objects.order_by('-created')
-        return render(request, "news/news_page.html", context={'data': ordered_data, 'weather': weather_class.get_weather(city=current_city), 'city_form': city_form})
+        return render(request, "news/news_page.html", context={'data': ordered_data, 'weather': weather_class.get_weather(city=current_city)})
 
 
 class SpecificNewsPage(View):
