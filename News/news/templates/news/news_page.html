@@ -27,13 +27,27 @@
                 <p><a href="/news/create/">Create news</a></p>
             </div>
             <div id="right">
-                <h4 class="weather">Weather in {{ weather.name }}:</h4>
-                <p class="weather">Now {{ weather.description }}</p>
-                <p class="weather">Current temperature: {{ weather.temp }} °C</p>
-                <p class="weather">Feels like: {{ weather.feels_like }} °C</p>
-                <p class="weather">Pressure: {{ weather.pressure }} mmhg</p>
-                <p class="weather">Humidity: {{ weather.humidity }}%</p>
-                <p class="weather">Wind: {{ weather.wind_speed }} kmph</p>
+                {% if weather %}
+                    <h4 class="weather">Weather in {{ weather.name }}:</h4>
+                    <p class="weather">Now {{ weather.description }}</p>
+                    <p class="weather">Current temperature: {{ weather.temp }} °C</p>
+                    <p class="weather">Feels like: {{ weather.feels_like }} °C</p>
+                    <p class="weather">Pressure: {{ weather.pressure }} mmhg</p>
+                    <p class="weather">Humidity: {{ weather.humidity }}%</p>
+                    <p class="weather">Wind: {{ weather.wind_speed }} kmph</p>
+                    </br>
+                    <p>If this is not your city, enter yours:</p>
+                    <form action="/news/" method="post">{% csrf_token %}
+                        <input type="text" name="city">
+                        <button type="submit">Submit</button>
+                    </form>
+                {% else %}
+                    <p>There is no such city. Enter another:</p>
+                    <form action="/news/" method="post">{% csrf_token %}
+                        <input type="text" name="city">
+                        <button type="submit">Submit</button>
+                    </form>
+                {% endif %}
             </div>
         </main>
     </body>

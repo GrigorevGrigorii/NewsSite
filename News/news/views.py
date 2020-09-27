@@ -21,6 +21,16 @@ class NewsPage(View):
     def get(self, request, *args, **kwargs):
         ordered_data = News.objects.order_by('-created')
         return render(request, "news/news_page.html", context={'data': ordered_data, 'weather': weather_class.get_weather(city=current_city)})
+    
+    def post(self, request, *args, **kwargs):
+        city = request.POST.get('city')
+        if weather_class.get_weather(city=city) is None:
+            ordered_data = News.objects.order_by('-created')
+            return render(request, "news/news_page.html", context={'data': ordered_data, 'weather': None})
+        else:
+            global current_city
+            current_city = city
+            return redirect('/news/')
 
 
 class SpecificNewsPage(View):
