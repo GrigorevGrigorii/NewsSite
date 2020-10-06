@@ -37,17 +37,13 @@
                     <p class="weather">Wind: {{ weather.wind_speed }} kmph</p>
                     </br>
                     <p>If this is not your city, enter yours:</p>
-                    <form action="/news/" method="post">{% csrf_token %}
-                        <input type="text" name="city">
-                        <button type="submit">Submit</button>
-                    </form>
                 {% else %}
                     <p>There is no such city. Enter another:</p>
-                    <form action="/news/" method="post">{% csrf_token %}
-                        <input type="text" name="city">
-                        <button type="submit">Submit</button>
-                    </form>
                 {% endif %}
+                <form action="/news/" method="post">{% csrf_token %}
+                    <input type="text" name="city">
+                    <button type="submit">Submit</button>
+                </form>
             </div>
         </main>
     </body>
