@@ -1,50 +1,102 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <title>News</title>
         {% load static %}
-        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+        <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/jumbotron/">
+        <!-- Bootstrap core CSS -->
+        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+        <style>
+            .font-weight-normal {
+                line-height: 0.5;
+            }
+            #separate{
+                display: flex;
+                justify-content: space-between;
+            }
+        </style>
+        <!-- Custom styles for this template -->
+        <link href="{% static 'css/jumbotron.css' %}" rel="stylesheet">
     </head>
     <body>
-        <h2>News</h2>
-        <form action="/news/search" method="post">{% csrf_token %}
-            <input type="text" name="q">
-            <button type="submit">Search</button>
-        </form>
-        
-        <main>
-            <div id="left">
-                {% regroup data by created|date:"Y-m-d" as grouped_data %}
-                {% for group in grouped_data %}
-                    <h4>{{ group.grouper }}</h4>
-                    <ul>
-                        {% for item in group.list %}
-                            <li><a href="/news/{{ item.link }}/">{{ item.title }}</a></li>
-                        {% endfor %}
-                    </ul>
-                {% endfor %}
-                <p><a href="/news/create/">Create news</a></p>
-            </div>
-            <div id="right">
-                {% if weather %}
-                    <h4 class="weather">Weather in {{ weather.name }}:</h4>
-                    <p class="weather">Now {{ weather.description }}</p>
-                    <p class="weather">Current temperature: {{ weather.temp }} °C</p>
-                    <p class="weather">Feels like: {{ weather.feels_like }} °C</p>
-                    <p class="weather">Pressure: {{ weather.pressure }} mmhg</p>
-                    <p class="weather">Humidity: {{ weather.humidity }}%</p>
-                    <p class="weather">Wind: {{ weather.wind_speed }} kmph</p>
-                    </br>
-                    <p>If this is not your city, enter yours:</p>
-                {% else %}
-                    <p>There is no such city. Enter another:</p>
-                {% endif %}
-                <form action="/news/" method="post">{% csrf_token %}
-                    <input type="text" name="city">
-                    <button type="submit">Submit</button>
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <a class="navbar-brand" href="/news/">News</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/news/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/news/create/">Create news</a>
+                    </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0" action="/news/search" method="post">{% csrf_token %}
+                    <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" name="q">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form>
             </div>
+        </nav>
+
+        <main role="main">
+
+            <!-- Main jumbotron for a primary marketing message or call to action -->
+            <div class="jumbotron">
+                <div class="container">
+                    <main id="separate">
+                        <div id="left">
+                            <h1 class="display-3">News</h1>
+                        </div>
+                        <div id="right">
+                            {% if weather %}
+                                <h4 class="font-weight-normal" class="weather">Weather in {{ weather.name }}:</h4>
+                                </br>
+                                <p class="font-weight-normal" class="weather">Now {{ weather.description }}</p>
+                                <p class="font-weight-normal" class="weather">Current temperature: {{ weather.temp }} °C</p>
+                                <p class="font-weight-normal" class="weather">Feels like: {{ weather.feels_like }} °C</p>
+                                <p class="font-weight-normal" class="weather">Pressure: {{ weather.pressure }} mmhg</p>
+                                <p class="font-weight-normal" class="weather">Humidity: {{ weather.humidity }}%</p>
+                                <p class="font-weight-normal" class="weather">Wind: {{ weather.wind_speed }} kmph</p>
+                                </br>
+                                <p class="font-weight-normal">If this is not your city, enter yours:</p>
+                            {% else %}
+                                <p class="font-weight-normal">There is no such city. Enter another:</p>
+                            {% endif %}
+                            <form class="form-inline my-2 my-lg-0" action="/news/" method="post">{% csrf_token %}
+                                <input class="form-control mr-sm-2" type="text" placeholder="Enter your city" aria-label="Search" name="city">
+                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Submit</button>
+                            </form>
+                        </div>
+                    </main>
+                </div>
+            </div>
+
+            <div class="container">
+            <!-- Example row of columns -->
+                <div class="row">
+                    {% for item in data %}
+                        <div class="col-md-4">
+                            <h2 class="text-monospace">{{ item.title }}</h2>
+                            <br>
+                            <p class="text-monospace">{{ item.text }}</p>
+                            <p><a class="btn btn-secondary" href="/news/{{ item.link }}/" role="button">View details &raquo;</a></p>
+                        </div>
+                    {% endfor %}
+                </div>
+                <hr>
+            </div> <!-- /container -->
+
         </main>
+
+        <footer class="container">
+            <p>&copy; Grigorev Grigorii 2020</p>
+        </footer>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script>window.jQuery || document.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')</script><script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
