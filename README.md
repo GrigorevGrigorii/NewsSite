@@ -1,4 +1,4 @@
-# ProjectForComputerWorkshop
+# NewsSite
 
 # Новостной сайт
 
