@@ -78,24 +78,22 @@
 
             <div class="container">
             <!-- Example row of columns -->
-                {% if data %}
-                    {% regroup data by created|date:"Y-m-d" as grouped_data %}
-                    {% for group in grouped_data %}
-                        <h4 class="text-monospace">{{ group.grouper }}</h4>
-                        <br>
-                        <div class="row">
-                            {% for item in group.list %}
-                                <div class="col-md-4">
-                                    <h2 class="text-monospace">{{ item.title }}</h2>
-                                    <p class="text-monospace">{{ item.text|truncatewords:20 }}</p>
-                                    <p><a class="btn btn-secondary" href="/news/{{ item.link }}/" role="button">View details &raquo;</a></p>
-                                </div>
-                            {% endfor %}
-                        </div>
-                        <br>
-                        <hr>
-                    {% endfor %}
-                {% endif %}
+                {% regroup data by created|date:"Y-m-d" as grouped_data %}
+                {% for group in grouped_data %}
+                    <h4 class="text-monospace">{{ group.grouper }}</h4>
+                    <br>
+                    <div class="row">
+                        {% for item in group.list %}
+                            <div class="col-md-4">
+                                <h2 class="text-monospace">{{ item.title }}</h2>
+                                <p class="text-monospace">{{ item.text|truncatewords:20 }}</p>
+                                <p><a class="btn btn-secondary" href="/news/{{ item.link }}/" role="button">View details &raquo;</a></p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <br>
+                    <hr>
+                {% endfor %}
             </div> <!-- /container -->
 
         </main>
