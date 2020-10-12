@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'or)5fc#s10$jsrronkiyw&9#^l^t5fi%5rna(69qcc%xqcuhe5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -125,3 +125,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 # Activate Django-Heroku.
 django_heroku.settings(locals())
+
+LOGIN_REDIRECT_URL = '/news/'
+
+LOGOUT_REDIRECT_URL = '/news/'
