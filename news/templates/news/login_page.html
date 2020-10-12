@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>{{ specific_news.title }}</title>
+        <title>Log in</title>
         {% load static %}
         <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/jumbotron/">
         <!-- Bootstrap core CSS -->
@@ -39,20 +39,31 @@
         </nav>
 
         <main role="main">
-
             <!-- Main jumbotron for a primary marketing message or call to action -->
             <div class="jumbotron">
                 <div class="container">
-                    <h1 class="display-3">{{ specific_news.title }}</h1>
+                    <h1 class="display-3">Log in</h1>
                 </div>
             </div>
-
             <div class="container">
-                <h4 class="text-monospace">{{ specific_news.created|date:"Y-m-d H:i:s" }}</h4>
-                <br>
-                <p class="text-monospace">{{ specific_news.text }}</p>
+                <form action="/login/" method="post">{% csrf_token %}
+                    <h4 class="text-monospace">Enter the username:</h4>
+                    <input class="form-control mr-sm-2" type="text" name="username" size=50>
+                    <br>
+                    <h4 class="text-monospace">Enter the password:</h4>
+                    <input class="form-control mr-sm-2" type="password" name="password" size=50>
+                    <br>
+                    {% if error %}
+                        <div class="alert alert-danger" role="alert">
+                            There is no such user
+                        </div>
+                    {% endif %}
+                    <br>
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Log in</button>
+                </form>
                 <hr>
-            </div> <!-- /container -->
+                <br>
+            </div>
         </main>
 
         <footer class="container">

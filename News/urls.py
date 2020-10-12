@@ -15,16 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from news.views import StartPage, SpecificNewsPage, NewsPage, CreatePage, SearchPage
+from news.views import StartView, SpecificNewsView, NewsView, CreateView, SearchView, LogInView, SignUpView
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
-    path('', StartPage.as_view()),
-    path('news/', NewsPage.as_view()),
-    path('news/create/', CreatePage.as_view()),
-    path('news/search', SearchPage.as_view()),
-    path('news/<int:link>/', SpecificNewsPage.as_view()),
+    path('', StartView.as_view()),
+    path('login/', LogInView.as_view()),
+    path('signup/', SignUpView.as_view()),
+    path('logout/', LogoutView.as_view()),
+    path('news/', NewsView.as_view()),
+    path('news/create/', CreateView.as_view()),
+    path('news/search', SearchView.as_view()),
+    path('news/<int:link>/', SpecificNewsView.as_view()),
     path('admin/', admin.site.urls),
 ]
 
