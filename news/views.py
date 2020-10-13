@@ -4,9 +4,9 @@ from django.http import Http404
 from django.views import View
 
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
-from .models import News
+from .models import News, Comments
 
 from .weather import get_weather
 
@@ -37,6 +37,13 @@ class LogInView(View):
             return render(request, "news/login_page.html", context={'error': True, 'is_authenticated': request.user.is_authenticated})
 
 
+class LogoutView(View):
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            logout(request)
+        return redirect('/news/')
+
+
 class SignUpView(View):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -52,6 +59,8 @@ class SignUpView(View):
 
         if username in [item[0] for item in User.objects.values_list('username')]:
             return render(request, "news/signup_page.html", context={'is_authenticated': request.user.is_authenticated, 'username_error_exists': True})
+        if len(username) > 150:
+            return render(request, "news/signup_page.html", context={'is_authenticated': request.user.is_authenticated, 'username_error_too_long': True})
         if username in [item[0] for item in User.objects.values_list('email')]:
             return render(request, "news/signup_page.html", context={'is_authenticated': request.user.is_authenticated, 'email_error_exists': True})
         if len(password) < 8 or password.isnumeric():
@@ -59,8 +68,7 @@ class SignUpView(View):
         if password != password_again:
             return render(request, "news/signup_page.html", context={'is_authenticated': request.user.is_authenticated, 'password_again_error': True})
 
-        user = User.objects.create_user(username=username, email=email, password=password)
-        user.save()
+        User.objects.create_user(username=username, email=email, password=password)
         return redirect('/login/')
 
 
@@ -85,8 +93,22 @@ class SpecificNewsView(View):
         specific_news = News.objects.filter(link=link).first()
         if not specific_news:
             raise Http404
-        specific_news.created += get_weather(city=current_city)['timezone']
-        return render(request, "news/specific_news_page.html", context={'specific_news': specific_news, 'is_authenticated': request.user.is_authenticated})
+        tz = get_weather(city=current_city)['timezone']
+        specific_news.created += tz
+        comments = Comments.objects.filter(news=specific_news).order_by('-created')
+        for comment in comments:
+            comment.created += tz
+        return render(request, "news/specific_news_page.html", context={'specific_news': specific_news, 'is_authenticated': request.user.is_authenticated, 'comments': comments})
+
+    def post(self, request, link, *args, **kwargs):
+        specific_news = News.objects.filter(link=link).first()
+        if not specific_news:
+            raise Http404
+        text = request.POST.get('text_of_comment')
+        username = request.user.username if request.user.is_authenticated else ""
+        Comments.objects.create(text=text, username=username, news=specific_news)
+
+        return redirect(f'/news/{link}/')
 
 
 class SearchView(View):

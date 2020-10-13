@@ -51,7 +51,12 @@
                     <input class="form-control mr-sm-2" type="text" name="username" size=50>
                     {% if username_error_exists %}
                         <div class="alert alert-danger" role="alert">
-                            This username is taken
+                            This username is taken.
+                        </div>
+                    {% endif %}
+                    {% if username_error_too_long %}
+                        <div class="alert alert-danger" role="alert">
+                            This username is too long. 150 characters or less required.
                         </div>
                     {% endif %}
                     <!--<div class="alert alert-warning" role="alert">
@@ -62,7 +67,7 @@
                     <input class="form-control mr-sm-2" type="text" name="email" size=50>
                     {% if email_error_exists %}
                         <div class="alert alert-danger" role="alert">
-                            This email is taken
+                            This email is taken.
                         </div>
                     {% endif %}
                     <br>
