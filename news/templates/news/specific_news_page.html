@@ -60,15 +60,19 @@
                 <h3>Comments</h3>
                 <form action="/news/{{ specific_news.link }}/" method="post">{% csrf_token %}
                     <input class="form-control mr-sm-2" type="text" placeholder="Share something" aria-label="Search" name="text_of_comment">
+                    {% if error_empty %}
+                        <div class="alert alert-danger" role="alert">
+                            You cannot post empty string.
+                        </div>
+                    {% endif %}
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Post</button>
                 </form>
                 {% for comment in comments %}
                     <br>
                     <div class="card">
                         <div class="card-body">
-                            {% if comment.username %}<p><b>{{ comment.username }}</b></p>{% endif %}
+                            <p>{% if comment.username %}<b>{{ comment.username }}</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% endif %}{{ comment.created|date:"Y-m-d H:i:s" }}</p>
                             <p>{{ comment.text }}</p>
-                            <p class="card-text"><small class="text-muted">{{ comment.created|date:"Y-m-d H:i:s" }}</small></p>
                         </div>
                     </div>
                 {% endfor %}

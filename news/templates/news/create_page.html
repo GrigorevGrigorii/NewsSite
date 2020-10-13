@@ -50,9 +50,19 @@
                 <form action="/news/create/" method="post">{% csrf_token %}
                     <h4 class="text-monospace">Enter the title of your news:</h4>
                     <input class="form-control mr-sm-2" type="text" name="title" size=50>
+                    {% if error_empty_title %}
+                        <div class="alert alert-danger" role="alert">
+                            Enter some title!
+                        </div>
+                    {% endif %}
                     <br>
                     <h4 class="text-monospace">Enter the text of your news:</h4>
                     <input class="form-control mr-sm-2" type="text" name="text" size=50>
+                    {% if error_empty_text %}
+                        <div class="alert alert-danger" role="alert">
+                            Enter some text!
+                        </div>
+                    {% endif %}
                     <br>
                     <br>
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Create news</button>
