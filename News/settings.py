@@ -125,7 +125,3 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 # Activate Django-Heroku.
 django_heroku.settings(locals())
-
-LOGIN_REDIRECT_URL = '/news/'
-
-LOGOUT_REDIRECT_URL = '/news/'
