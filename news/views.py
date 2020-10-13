@@ -61,7 +61,7 @@ class SignUpView(View):
 
         user = User.objects.create_user(username=username, email=email, password=password)
         user.save()
-        return redirect('/news/')
+        return redirect('/login/')
 
 
 class NewsView(View):
