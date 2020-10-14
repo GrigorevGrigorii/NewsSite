@@ -52,11 +52,15 @@ class SignUpView(View):
             return redirect('/news/')
 
     def post(self, request, *args, **kwargs):
-        username = request.POST['username']
-        email = request.POST['email']
+        username = request.POST['username'].strip()
+        email = request.POST['email'].strip()
         password = request.POST['password']
         password_again = request.POST['password_again']
-
+        
+        if username == "":
+            return render(request, "news/signup_page.html", context={'is_authenticated': request.user.is_authenticated, 'username_error_empty': True})
+        if email == "":
+            return render(request, "news/signup_page.html", context={'is_authenticated': request.user.is_authenticated, 'email_error_empty': True})
         if username in [item[0] for item in User.objects.values_list('username')]:
             return render(request, "news/signup_page.html", context={'is_authenticated': request.user.is_authenticated, 'username_error_exists': True})
         if len(username) > 150:
@@ -106,7 +110,7 @@ class SpecificNewsView(View):
         specific_news = News.objects.filter(link=link).first()
         if not specific_news:
             raise Http404
-        text = request.POST.get('text_of_comment')
+        text = request.POST.get('text_of_comment').strip()
         if text == "":
             comments = Comments.objects.filter(news=specific_news).order_by('-created')
             return render(request, "news/specific_news_page.html", context={'specific_news': specific_news, 'is_authenticated': request.user.is_authenticated, 'comments': comments, 'error_empty': True})
@@ -135,8 +139,8 @@ class CreateView(View):
         return render(request, "news/create_page.html", context={'is_authenticated': request.user.is_authenticated})
     
     def post(self, request, *args, **kwargs):
-        text = request.POST.get('text')
-        title = request.POST.get('title')
+        text = request.POST.get('text').strip()
+        title = request.POST.get('title').strip()
         if text == "" and title == "":
             return render(request, "news/create_page.html", context={'is_authenticated': request.user.is_authenticated, 'error_empty_text': True, 'error_empty_title': True})
         if text == "":
