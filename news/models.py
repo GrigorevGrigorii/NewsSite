@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -12,6 +13,13 @@ class News(models.Model):
 
 class Comments(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    text = models.CharField(max_length=2048)
-    username = models.CharField(max_length=150)
-    news = models.ForeignKey('News', on_delete=models.CASCADE)
+    text = models.CharField(max_length=256)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    news = models.ForeignKey(News, on_delete=models.CASCADE)
+
+
+# class RepliesToComments(models.Model):
+#     created = models.DateTimeField(auto_now_add=True)
+#     text = models.CharField(max_length=256)
+#     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+#     comment = models.ForeignKey(Comments, on_delete=models.CASCADE)

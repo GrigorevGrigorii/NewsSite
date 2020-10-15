@@ -114,8 +114,14 @@ class SpecificNewsView(View):
         if text == "":
             comments = Comments.objects.filter(news=specific_news).order_by('-created')
             return render(request, "news/specific_news_page.html", context={'specific_news': specific_news, 'is_authenticated': request.user.is_authenticated, 'comments': comments, 'error_empty': True})
-        username = request.user.username if request.user.is_authenticated else ""
-        Comments.objects.create(text=text, username=username, news=specific_news)
+        if len(text) > 256:
+            comments = Comments.objects.filter(news=specific_news).order_by('-created')
+            return render(request, "news/specific_news_page.html", context={'specific_news': specific_news, 'is_authenticated': request.user.is_authenticated, 'comments': comments, 'error_too_long': True})
+
+        if request.user.is_authenticated:
+            Comments.objects.create(text=text, user=request.user, news=specific_news)
+        else:
+            Comments.objects.create(text=text, news=specific_news)
 
         return redirect(f'/news/{link}/')
 
