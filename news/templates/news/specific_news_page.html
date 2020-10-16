@@ -50,7 +50,7 @@
             <div class="container">
                 <h4 class="text-monospace">{{ specific_news.created|date:"Y-m-d H:i:s" }}</h4>
                 <br>
-                <p class="text-monospace">{{ specific_news.text }}</p>
+                <p class="text-monospace">{{ specific_news.text|linebreaks }}</p>
                 <hr>
             </div> <!-- /container -->
             <br>
@@ -59,7 +59,9 @@
             <div class="container">
                 <h3>Comments</h3>
                 <form action="/news/{{ specific_news.link }}/" method="post">{% csrf_token %}
-                    <input class="form-control mr-sm-2" type="text" placeholder="Share something" aria-label="Search" name="text_of_comment">
+                    <div class="input-group">
+                        <textarea class="form-control" aria-label="With textarea" name="text_of_comment"></textarea>
+                    </div>
                     {% if error_empty %}
                         <div class="alert alert-danger" role="alert">
                             Enter some comment!
@@ -76,7 +78,7 @@
                     <div class="card">
                         <div class="card-body">
                             {% if comment.user %}<p><b>{{ comment.user.username }}</b></p>{% endif %}
-                            <p>{{ comment.text }}</p>
+                            <p>{{ comment.text|linebreaks }}</p>
                             <p class="card-text"><small class="text-muted">{{ comment.created|date:"Y-m-d H:i:s" }}</small></p>
                         </div>
                     </div>
