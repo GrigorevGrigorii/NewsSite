@@ -44,6 +44,7 @@
             <div class="jumbotron">
                 <div class="container">
                     <h1 class="display-3">{{ specific_news.title }}</h1>
+                    {% if specific_news.user %}<p>by <b>{{ specific_news.user.username }}</b></p>{% endif %}
                 </div>
             </div>
 

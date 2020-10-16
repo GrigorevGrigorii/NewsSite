@@ -162,7 +162,10 @@ class CreateView(View):
                     break
         else:
             link = 1
-
-        News.objects.create(text=text, title=title, link=link)
+        
+        if request.user.is_authenticated:
+            News.objects.create(text=text, title=title, link=link, user=request.user)
+        else:
+            News.objects.create(text=text, title=title, link=link)
         
         return redirect('/news/')

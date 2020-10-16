@@ -9,6 +9,7 @@ class News(models.Model):
     text = models.CharField(max_length=1048576)
     title = models.CharField(max_length=256)
     link = models.IntegerField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
 
 class Comments(models.Model):
