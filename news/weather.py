@@ -1,10 +1,8 @@
 import requests
-from datetime import datetime, timedelta
 
 
 def get_weather(city="Saint Petersburg"):
-    r = requests.get('https://api.openweathermap.org/data/2.5/weather',
-                     {'q': city, 'appid': '9f7ad1eebe97cba2c8ebb5dd08ab3a52'})
+    r = requests.get('https://api.openweathermap.org/data/2.5/weather', {'q': city, 'appid': '9f7ad1eebe97cba2c8ebb5dd08ab3a52'})
     if r.status_code != 200:
         return None
 
