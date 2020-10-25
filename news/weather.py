@@ -1,4 +1,5 @@
 import requests
+from datetime import timedelta
 
 
 def get_weather(city="Saint Petersburg"):
