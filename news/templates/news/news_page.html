@@ -13,6 +13,9 @@
             .font-weight-normal {
                 line-height: 0.5;
             }
+            .long-word {
+                word-wrap: break-word;
+            }
         </style>
         <!-- Custom styles for this template -->
         <link href="{% static 'css/jumbotron.css' %}" rel="stylesheet">
@@ -105,6 +108,7 @@
                 {% for group in grouped_data %}
                     <h4 class="text-monospace">{{ group.grouper }}</h4>
                     <br>
+                    <div class="long-word">
                     <div class="row">
                         {% for item in group.list %}
                             <div class="col-md-4">
@@ -115,6 +119,7 @@
                                 </div>
                             </div>
                         {% endfor %}
+                    </div>
                     </div>
                     <br>
                     <hr>
