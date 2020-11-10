@@ -14,6 +14,16 @@ class News(models.Model):
     def __str__(self):
         return self.title
 
+    def as_dict(self):
+        return {
+            'id': self.pk,
+            'created': self.created,
+            'text': self.text,
+            'title': self.title,
+            'link': self.link,
+            'user_id': self.user.id if self.user is not None else ""
+        }
+
 
 class Comments(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -23,6 +33,15 @@ class Comments(models.Model):
     
     def __str__(self):
         return self.text
+
+    def as_dict(self):
+        return {
+            'id': self.pk,
+            'created': self.created,
+            'text': self.text,
+            'user_id': self.user.id if self.user is not None else "",
+            'news_link': self.news.link
+        }
 
 
 # class RepliesToComments(models.Model):
