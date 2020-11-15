@@ -4,6 +4,7 @@ from django.views import View
 from news.models import News, Comments
 
 import json
+from datetime import datetime
 
 # Create your views here.
 
@@ -15,17 +16,19 @@ class UserAPI(View):
                 'id': request.user.pk,
                 'username': request.user.username,
                 'email': request.user.email,
+                'is_authenticated': True,
             }
             return JsonResponse(data, safe=False)
 
         else:
-            return JsonResponse({'error': 'user is not authenticated'}, safe=False)
+            return JsonResponse({'is_authenticated': False}, safe=False)
 
 
 class NewsAPI(View):
     def get(self, request, *args, **kwargs):
         news_link = request.GET.get('link')
         q = request.GET.get('q')
+        grouped = request.GET.get('grouped')
 
         if news_link:
             news_link = int(news_link)
@@ -39,6 +42,21 @@ class NewsAPI(View):
             q = q.rstrip('/')
             news_with_q = News.objects.filter(title__contains=q).order_by('-created')
             return JsonResponse([news.as_dict() for news in news_with_q], safe=False)
+
+        elif grouped and grouped.rstrip('/') == "true":
+            grouped_news = []
+            all_news = News.objects.all().order_by('-created')
+
+            for news in all_news:
+                created = news.created.strftime("%Y-%m-%d")
+                all_groupers = list(map(lambda item: item['grouper'], grouped_news))
+                if created not in all_groupers:
+                    grouped_news.append({'grouper': created, 'list': [news.as_dict()]})
+                else:
+                    group = list(filter(lambda item: item['grouper'] == created, grouped_news))[0]
+                    group['list'].append(news.as_dict())
+
+            return JsonResponse(grouped_news, safe=False)
 
         else:
             all_news = News.objects.all().order_by('-created')
