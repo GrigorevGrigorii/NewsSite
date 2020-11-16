@@ -27,8 +27,6 @@ class UserAPI(View):
 class NewsAPI(View):
     def get(self, request, *args, **kwargs):
         news_link = request.GET.get('link')
-        q = request.GET.get('q')
-        grouped = request.GET.get('grouped')
 
         if news_link:
             news_link = int(news_link)
@@ -38,14 +36,13 @@ class NewsAPI(View):
             else:
                 return JsonResponse({'error': 'there is no such specific news'}, safe=False, status=404)
 
-        elif q:
-            q = q.rstrip('/')
-            news_with_q = News.objects.filter(title__contains=q).order_by('-created')
-            return JsonResponse([news.as_dict() for news in news_with_q], safe=False)
+        q = request.GET.get('q').rstrip('/') if request.GET.get('q') else ''
+        grouped = request.GET.get('grouped')
 
-        elif grouped and grouped.rstrip('/') == "true":
+        all_news = News.objects.filter(title__contains=q).order_by('-created')
+
+        if grouped and grouped.rstrip('/').lower() == "true":
             grouped_news = []
-            all_news = News.objects.all().order_by('-created')
 
             for news in all_news:
                 created = news.created.strftime("%Y-%m-%d")
@@ -58,9 +55,7 @@ class NewsAPI(View):
 
             return JsonResponse(grouped_news, safe=False)
 
-        else:
-            all_news = News.objects.all().order_by('-created')
-            return JsonResponse([news.as_dict() for news in all_news], safe=False)
+        return JsonResponse([news.as_dict() for news in all_news], safe=False)
 
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body)
