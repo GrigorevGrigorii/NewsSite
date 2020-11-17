@@ -18,10 +18,14 @@ class UserAPI(View):
                 'email': request.user.email,
                 'is_authenticated': True,
             }
-            return JsonResponse(data, safe=False)
+            resp = JsonResponse(data, safe=False)
+            resp.setdefault('Access-Control-Allow-Origin', '*')
+            return resp
 
         else:
-            return JsonResponse({'is_authenticated': False}, safe=False)
+            resp = JsonResponse({'is_authenticated': False}, safe=False)
+            resp.setdefault('Access-Control-Allow-Origin', '*')
+            return resp
 
 
 class NewsAPI(View):
@@ -32,9 +36,13 @@ class NewsAPI(View):
             news_link = int(news_link)
             specific_news = News.objects.filter(link=news_link).first()
             if specific_news is not None:
-                return JsonResponse(specific_news.as_dict(), safe=False)
+                resp = JsonResponse(specific_news.as_dict(), safe=False)
+                resp.setdefault('Access-Control-Allow-Origin', '*')
+                return resp
             else:
-                return JsonResponse({'error': 'there is no such specific news'}, safe=False, status=404)
+                resp = JsonResponse({'error': 'there is no such specific news'}, safe=False, status=404)
+                resp.setdefault('Access-Control-Allow-Origin', '*')
+                return resp
 
         q = request.GET.get('q').rstrip('/') if request.GET.get('q') else ''
         grouped = request.GET.get('grouped')
@@ -53,9 +61,13 @@ class NewsAPI(View):
                     group = list(filter(lambda item: item['grouper'] == created, grouped_news))[0]
                     group['list'].append(news.as_dict())
 
-            return JsonResponse(grouped_news, safe=False)
+            resp = JsonResponse(grouped_news, safe=False)
+            resp.setdefault('Access-Control-Allow-Origin', '*')
+            return resp
 
-        return JsonResponse([news.as_dict() for news in all_news], safe=False)
+        resp = JsonResponse([news.as_dict() for news in all_news], safe=False)
+        resp.setdefault('Access-Control-Allow-Origin', '*')
+        return resp
 
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body)
@@ -73,7 +85,9 @@ class NewsAPI(View):
             data['user'] = request.user
         new_news = News.objects.create(**data)
 
-        return JsonResponse(new_news.as_dict(), safe=False)
+        resp = JsonResponse(new_news.as_dict(), safe=False)
+        resp.setdefault('Access-Control-Allow-Origin', '*')
+        return resp
 
     def delete(self, request, *args, **kwargs):
         data = json.loads(request.body)
@@ -82,7 +96,10 @@ class NewsAPI(View):
 
         if specific_news:
             specific_news.delete()
-        return JsonResponse(True, safe=False)
+
+        resp = JsonResponse(True, safe=False)
+        resp.setdefault('Access-Control-Allow-Origin', '*')
+        return resp
 
 
 class CommentsAPI(View):
@@ -91,17 +108,24 @@ class CommentsAPI(View):
 
         specific_news = News.objects.filter(link=news_link).first()
         if not specific_news:
-            return JsonResponse({'error': 'there is no such specific news'}, safe=False, status=404)
+            resp = JsonResponse({'error': 'there is no such specific news'}, safe=False, status=404)
+            resp.setdefault('Access-Control-Allow-Origin', '*')
+            return resp
 
         all_comments = Comments.objects.filter(news=specific_news).order_by('-created')
-        return JsonResponse([comment.as_dict() for comment in all_comments], safe=False)
+
+        resp = JsonResponse([comment.as_dict() for comment in all_comments], safe=False)
+        resp.setdefault('Access-Control-Allow-Origin', '*')
+        return resp
 
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body)
 
         specific_news = News.objects.filter(link=data['news_link']).first()
         if not specific_news:
-            return JsonResponse({'error': 'there is no such specific news'}, safe=False, status=404)
+            resp = JsonResponse({'error': 'there is no such specific news'}, safe=False, status=404)
+            resp.setdefault('Access-Control-Allow-Origin', '*')
+            return resp
 
         del data['news_link']
         data['news'] = specific_news
@@ -110,7 +134,9 @@ class CommentsAPI(View):
             data['user'] = request.user
         comment = Comments.objects.create(**data)
 
-        return JsonResponse(comment.as_dict(), safe=False)
+        resp = JsonResponse(comment.as_dict(), safe=False)
+        resp.setdefault('Access-Control-Allow-Origin', '*')
+        return resp
 
     def delete(self, request, *args, **kwargs):
         comment_id = json.loads(request.body)['id']
@@ -118,4 +144,7 @@ class CommentsAPI(View):
 
         if comment:
             comment.delete()
-        return JsonResponse(True, safe=False)
+
+        resp = JsonResponse(True, safe=False)
+        resp.setdefault('Access-Control-Allow-Origin', '*')
+        return resp
