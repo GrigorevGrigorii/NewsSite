@@ -12,69 +12,70 @@
       </div>
     </div>
     <div class="container">
-      <form action="/signup/" method="post">{% csrf_token %}
-        <h4 class="text-monospace">Enter the username:</h4>
-        <input class="form-control mr-sm-2" type="text" name="username" size=50>
-        {% if username_error_exists %}
-          <div class="alert alert-danger" role="alert">
-            This username is taken.
-          </div>
-        {% elif username_error_empty %}
-          <div class="alert alert-danger" role="alert">
-            Enter some username!
-          </div>
-        {% endif %}
-        {% if username_error_too_long %}
-          <div class="alert alert-danger" role="alert">
-            This username is too long. 150 characters or less required.
-          </div>
-        {% endif %}
+      <div class="row">
+        <div class="col-md-8">
+          <form action="/signup/" method="post" style="width: 500px">{% csrf_token %}
+            <input class="form-control mr-sm-2" type="text" name="username" size=50 placeholder="Enter the username">
+            {% if username_error_exists %}
+              <div class="alert alert-danger" role="alert">
+                This username is taken.
+              </div>
+            {% elif username_error_empty %}
+              <div class="alert alert-danger" role="alert">
+                Enter some username!
+              </div>
+            {% endif %}
+            {% if username_error_too_long %}
+              <div class="alert alert-danger" role="alert">
+                This username is too long. 150 characters or less required.
+              </div>
+            {% endif %}
+            <br>
+            <input class="form-control mr-sm-2" type="text" name="email" size=50 placeholder="Enter the email">
+            {% if email_error_exists %}
+              <div class="alert alert-danger" role="alert">
+                This email is taken.
+              </div>
+            {% elif email_error_empty %}
+              <div class="alert alert-danger" role="alert">
+                Enter some email!
+              </div>
+            {% endif %}
+            <br>
+                <input class="form-control mr-sm-2" type="password" name="password" size=50 placeholder="Enter the password">
+            {% if password_error %}
+              <div class="alert alert-danger" role="alert">
+                <p>Your password must contain at least 8 characters.</p>
+                <p>Your password can’t be entirely numeric.</p>
+              </div>
+            {% else %}
+              <div class="alert alert-warning" role="alert">
+                <p>Your password must contain at least 8 characters.</p>
+                <p>Your password can’t be entirely numeric.</p>
+              </div>
+            {% endif %}
+            <br>
+            <input class="form-control mr-sm-2" type="password" name="password_again" size=50 placeholder="Enter the password again">
+            {% if password_again_error %}
+              <div class="alert alert-danger" role="alert">
+                Enter the same password as before, for verification.
+              </div>
+            {% else %}
+              <div class="alert alert-warning" role="alert">
+                Enter the same password as before, for verification.
+              </div>
+            {% endif %}
+            <br>
+            <br>
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign up</button>
+          </form>
+        </div>
+        <div class="col-md-4">
+          <a class="btn btn-danger" href="{% url 'social:begin' 'google-oauth2' %}">Log in with Google</a>
+        </div>
+        <hr>
         <br>
-        <h4 class="text-monospace">Enter the email:</h4>
-        <input class="form-control mr-sm-2" type="text" name="email" size=50>
-        {% if email_error_exists %}
-          <div class="alert alert-danger" role="alert">
-            This email is taken.
-          </div>
-        {% elif email_error_empty %}
-          <div class="alert alert-danger" role="alert">
-            Enter some email!
-          </div>
-        {% endif %}
-        <br>
-        <h4 class="text-monospace">Enter the password:</h4>
-        <input class="form-control mr-sm-2" type="password" name="password" size=50>
-        {% if password_error %}
-          <div class="alert alert-danger" role="alert">
-            <p>Your password must contain at least 8 characters.</p>
-            <p>Your password can’t be entirely numeric.</p>
-          </div>
-        {% else %}
-          <div class="alert alert-warning" role="alert">
-            <p>Your password must contain at least 8 characters.</p>
-            <p>Your password can’t be entirely numeric.</p>
-          </div>
-        {% endif %}
-        <br>
-        <h4 class="text-monospace">Enter the password again:</h4>
-        <input class="form-control mr-sm-2" type="password" name="password_again" size=50>
-        {% if password_again_error %}
-          <div class="alert alert-danger" role="alert">
-            Enter the same password as before, for verification.
-          </div>
-        {% else %}
-          <div class="alert alert-warning" role="alert">
-            Enter the same password as before, for verification.
-          </div>
-        {% endif %}
-        <br>
-        <br>
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign up</button>
-      </form>
-      <br>
-      <a class="btn btn-primary" href="{% url 'social:begin' 'google-oauth2' %}">Google</a>
-      <hr>
-      <br>
+      </div>
     </div>
   </main>
 {% endblock %}
