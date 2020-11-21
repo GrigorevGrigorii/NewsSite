@@ -125,9 +125,7 @@ class CommentsAPI(View):
         return resp
 
     def post(self, request, *args, **kwargs):
-        print('*')
         data = json.loads(request.body)
-        print(data)
 
         specific_news = News.objects.filter(link=data['news_link']).first()
         if not specific_news:
