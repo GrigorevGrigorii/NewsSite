@@ -100,6 +100,12 @@ class NewsAPI(View):
         resp = JsonResponse(True, safe=False)
         resp.setdefault('Access-Control-Allow-Origin', '*')
         return resp
+    
+    def options(self, request, *args, **kwargs):
+        resp = JsonResponse({'status': 'ok'}, safe=False)
+        resp.setdefault('Access-Control-Allow-Origin', '*')
+        resp.setdefault('Access-Control-Allow-Headers', 'Content-Type')
+        return resp
 
 
 class CommentsAPI(View):
@@ -119,7 +125,9 @@ class CommentsAPI(View):
         return resp
 
     def post(self, request, *args, **kwargs):
+        print('*')
         data = json.loads(request.body)
+        print(data)
 
         specific_news = News.objects.filter(link=data['news_link']).first()
         if not specific_news:
@@ -147,4 +155,10 @@ class CommentsAPI(View):
 
         resp = JsonResponse(True, safe=False)
         resp.setdefault('Access-Control-Allow-Origin', '*')
+        return resp
+    
+    def options(self, request, *args, **kwargs):
+        resp = JsonResponse({'status': 'ok'}, safe=False)
+        resp.setdefault('Access-Control-Allow-Origin', '*')
+        resp.setdefault('Access-Control-Allow-Headers', 'Content-Type')
         return resp
