@@ -1,4 +1,4 @@
-{% extends 'news/base.html' %}
+{% extends 'account/base.html' %}
 
 
 {% block title %}Sign up{% endblock %}
@@ -14,7 +14,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-8">
-          <form action="/signup/" method="post" style="width: 500px">{% csrf_token %}
+          <form action="/account/signup/" method="post" style="width: 500px">{% csrf_token %}
             <input class="form-control mr-sm-2" type="text" name="username" size=50 placeholder="Enter the username">
             {% if username_error_exists %}
               <div class="alert alert-danger" role="alert">
