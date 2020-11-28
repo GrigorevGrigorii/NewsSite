@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import StartView, SpecificNewsView, NewsView, CreateView, SearchView, LogInView, SignUpView, LogoutView
+
+from .views import *
 
 urlpatterns = [
     path('', NewsView.as_view()),

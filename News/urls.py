@@ -15,22 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from news.views import StartView, LogInView, SignUpView, LogoutView
+from news.views import StartView
 from django.conf.urls.static import static
 
 from django.conf import settings
-from django.contrib.auth import logout
 
 urlpatterns = [
     path('', StartView.as_view()),
-    path('login/', LogInView.as_view()),
-    path('signup/', SignUpView.as_view()),
-    path('logout/', LogoutView.as_view()),
     path('news/', include('news.urls')),
     path('api/', include('api.urls')),
+    path('account/', include('account.urls')),
     path('admin/', admin.site.urls),
-    path('', include('social_django.urls', namespace='social')),
-    path('logout/', logout, {'next_page': settings.LOGOUT_REDIRECT_URL}, name='logout'),
 ]
 
 urlpatterns += static(settings.STATIC_URL)
